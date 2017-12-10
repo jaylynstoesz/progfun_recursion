@@ -26,4 +26,20 @@ class BalanceSuite extends FunSuite {
     assert(!balance("())(".toList))
   }
 
+  test("balance: triple nested paren") {
+    assert(balance("((()()))".toList))
+  }
+
+  test("balance: triple nested paren 1 off") {
+    assert(balance("((()()())())".toList))
+  }
+
+  test("balance: open & close") {
+    assert(!balance("()()()()()(()(".toList))
+  }
+
+  test("balance: open & close") {
+    assert(!balance("(())))".toList))
+  }
+
 }

@@ -20,10 +20,10 @@ object Main {
       throw new NoSuchElementException
     }
 
-    // if col is the beginning or end of the row, its value is 1
+    // If col is the beginning or end of the row, its value is 1
     if (c == 0 || c == r) {
       1
-      // add values of index and one index prior fron row above
+      // Add values of index and one index prior fron row above
     } else {
       pascal(c, r - 1) + pascal(c - 1, r - 1)
     }
@@ -32,43 +32,33 @@ object Main {
   /**
     * Exercise 2
     */
-  // ())(
-  // )(
-  // ()
-  //
-
-  // (()())
-  // (())(
   def balance(chars: List[Char]): Boolean = {
-    // filter out all the extra characters
+    // Filter out all the extra characters
     val p = chars.filter(c => c.toString == ")" || c.toString == "(")
 
-    if (p.length <= 1) {
-      p.isEmpty
+    val opens: Boolean = p.startsWith("(")
+    val ends: Boolean = p.endsWith(")")
+    val closes: Boolean = p.tail.startsWith(")")
+    // drop first two characters () and check the rest of the string
+    lazy val tailIsBalanced: Boolean = balance(p.tail.tail)
+
+    // Starting with a close paren and ending with an open paren are invalid
+    if (!opens || !ends) {
+      false
     } else {
-      if (p.startsWith("(")) {
-        if (p.tail.startsWith(")")) {
-          // drop open-close pairs from the beginning of the string
-          balance(p.tail.tail)
-        } else {
-          // another open paren
-          !balance(p.tail)
-        }
-      // has to begin with open paren
-      } else {
-        false
-      }
+      // If the string starts with an open and close paren, the rest of the tail must be balanced.
+      // Conversely, if the string starts with multiple open parens, it must also end with the same number of closing parens.
+      (closes && tailIsBalanced) || (!closes && !tailIsBalanced)
     }
   }
 
   /**
     * Exercise 3
     */
-
   // either you can make change with just that one coin or...
   // you can subtract from the total and make change with the remaining coins
-//  countChange(300 ,List(500,5,50,100,20,200,10)) === 1022) => (300, 200, 100, 50, 30, 10, 5)
-//  4,List(1,2)) === 3) => 4, (2, 1) should equal 3
+  //  countChange(300 ,List(500,5,50,100,20,200,10)) === 1022) => (300, 200, 100, 50, 30, 10, 5)
+  //  4,List(1,2)) === 3) => 4, (2, 1) should equal 3
   def countChange(money: Int, coins: List[Int]): Int = {
     if (money <= 0 || coins.isEmpty) {
       0
@@ -87,7 +77,7 @@ object Main {
         } // 4-2: +1
 
         count += countChange(money - c, srt2.tail) // 4-2: 2-2: +1 2-1: +1
-//        count += countChange(money, srt2.tail)
+        //        count += countChange(money, srt2.tail)
       }
 
       count
