@@ -37,9 +37,4 @@ class BalanceSuite extends FunSuite {
   test("balance: open & close") {
     assert(!balance("()()()()()(()(".toList))
   }
-
-  test("balance: open & close") {
-    assert(!balance("(())))".toList))
-  }
-
 }

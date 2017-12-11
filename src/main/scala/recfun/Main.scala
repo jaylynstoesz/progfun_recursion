@@ -1,7 +1,5 @@
 package recfun
 
-import scala.collection.mutable.ArrayBuffer
-
 object Main {
   def main(args: Array[String]) {
     println("Pascal's Triangle")
@@ -50,15 +48,12 @@ object Main {
       // Conversely, if the string starts with multiple open parens, it must also end with the same number of closing parens.
       (closes && tailIsBalanced) || (!closes && !tailIsBalanced)
     }
+    // condensed: (opens && ends) && (closes && tailIsBalanced) || (!closes && !tailIsBalanced)
   }
 
   /**
     * Exercise 3
     */
-  // either you can make change with just that one coin or...
-  // you can subtract from the total and make change with the remaining coins
-  //  countChange(300 ,List(500,5,50,100,20,200,10)) === 1022) => (300, 200, 100, 50, 30, 10, 5)
-  //  4,List(1,2)) === 3) => 4, (2, 1) should equal 3
   def countChange(money: Int, coins: List[Int]): Int = {
     if (money <= 0 || coins.isEmpty) {
       0
@@ -67,17 +62,17 @@ object Main {
 
       def canMakeChangeWith(c1: Int, c2: Int): Boolean = (money - c1) % c2 == 0
 
-      val srt = coins.sorted.reverse
-      val h = srt.head
-      val srt2 = coins.filter(_ <= h)
+      val srt = coins.filter(_ <= money).sorted.reverse
+      val h = srt.headOption.getOrElse(0)
 
-      srt2.foreach { c =>
+      srt.foreach { c =>
         if (canMakeChangeWith(h, c)) {
           count += 1
-        } // 4-2: +1
+        }
 
-        count += countChange(money - c, srt2.tail) // 4-2: 2-2: +1 2-1: +1
-        //        count += countChange(money, srt2.tail)
+        if (c > 1) {
+          count += countChange(money - c, srt.tail)
+        }
       }
 
       count
